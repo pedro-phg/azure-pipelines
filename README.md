@@ -8,7 +8,7 @@
 ## 🚀 Funcionalidades
 
 - Criação de pipelines do Azure DevOps usando classes Python.
-- Suporte a estágios, jobs e tarefas.
+- Suporte a stages, jobs e tarefas.
 - Execução de scripts Python e Bash diretamente na definição do pipeline.
 - Conversão de pipelines YAML existentes para classes Python.
 - Organização modular de scripts para melhor gerenciamento.
