@@ -1,5 +1,7 @@
 from enum import Enum
+import yaml
 from typing import List, Dict, Union
+from collections import OrderedDict
 
 
 class WorkspaceCleanOptions(Enum):
@@ -87,7 +89,7 @@ class Job:
 
     def to_dict(self) -> Dict:
         """Convert the job to a dictionary for YAML serialization."""
-        job_dict = {
+        job_dict = OrderedDict({
             "job": self.name,
             "displayName": self.display_name,
             "dependsOn": self.depends_on if self.depends_on else None,
@@ -105,6 +107,30 @@ class Job:
             "steps": self.steps,
             "services": self.services,
             "uses": self.uses,
-        }
+        })
         # Remove None values for cleaner output
         return {k: v for k, v in job_dict.items() if v is not None}
+
+    def to_yaml(self, filepath: str = None) -> Union[str, None]:
+        """
+        Convert the job to YAML format and optionally save to a file.
+
+        Args:
+            filepath (str): Path to save the YAML file. If None, returns the YAML string.
+
+        Returns:
+            str | None: The YAML string if filepath is None, otherwise None.
+        """
+        job_dict = self.to_dict()
+        yaml_output = yaml.dump(
+            job_dict, 
+            default_flow_style=False, 
+            sort_keys=False
+        )
+
+        if filepath:
+            with open(filepath, "w") as file:
+                file.write(yaml_output)
+            print(f"YAML exported to {filepath}")
+            return None
+        return yaml_output

@@ -1,0 +1,33 @@
+job: BuildJob
+displayName: Build Project
+dependsOn:
+- Initialize
+condition: succeeded()
+strategy:
+  matrix:
+    OS:
+    - ubuntu-20.04
+    - windows-2019
+  maxParallel: 2
+continueOnError: false
+pool:
+  vmImage: Azure Pipelines
+workspace:
+  clean: outputs
+container: my-docker-container:latest
+timeoutInMinutes: 45
+cancelTimeoutInMinutes: 15
+variables:
+  ENV: production
+steps:
+- script: echo 'Building...'
+  displayName: Run Build Script
+- bash: scripts/test.sh
+  displayName: Run Tests
+services:
+  myService: my-container-resource
+uses:
+  repositories:
+  - myRepo
+  pools:
+  - myPool
